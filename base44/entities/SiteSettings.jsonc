@@ -1,0 +1,56 @@
+{
+  "name": "SiteSettings",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Setting key identifier (e.g. 'profile')"
+    },
+    "builder_name": {
+      "type": "string",
+      "description": "Full name of the portfolio owner"
+    },
+    "title": {
+      "type": "string",
+      "description": "Professional title shown in hero"
+    },
+    "tagline": {
+      "type": "string",
+      "description": "Hero positioning statement"
+    },
+    "bio": {
+      "type": "string",
+      "description": "About section bio text"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of skill tag strings"
+    },
+    "github_url": {
+      "type": "string"
+    },
+    "linkedin_url": {
+      "type": "string"
+    },
+    "twitter_url": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "tokens_orchestrated": {
+      "type": "string",
+      "description": "Display string for hero widget e.g. '47.2M'"
+    },
+    "apps_deployed": {
+      "type": "number",
+      "description": "Number of apps deployed for hero widget"
+    }
+  },
+  "required": [
+    "key"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "ContactInquiry",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Visitor's full name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Visitor's email address"
+    },
+    "message": {
+      "type": "string",
+      "description": "Their message or inquiry"
+    },
+    "inquiry_type": {
+      "type": "string",
+      "enum": [
+        "hiring",
+        "freelance",
+        "other"
+      ],
+      "default": "other",
+      "description": "Type of inquiry"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "unread",
+        "read",
+        "archived"
+      ],
+      "default": "unread",
+      "description": "Admin read status"
+    }
+  },
+  "required": [
+    "name",
+    "email",
+    "message"
+  ]
+}
