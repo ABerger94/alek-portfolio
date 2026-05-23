@@ -14,6 +14,7 @@ import AdminProjects from './pages/admin/AdminProjects';
 import ProjectEditor from './pages/admin/ProjectEditor';
 import AdminInquiries from './pages/admin/AdminInquiries';
 import AdminSettings from './pages/admin/AdminSettings';
+import ResumePrint from './pages/ResumePrint';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -40,6 +41,7 @@ const AuthenticatedApp = () => {
       {/* Public routes */}
       <Route path="/" element={<Home />} />
       <Route path="/project/:id" element={<ProjectDetail />} />
+      <Route path="/resume" element={<ResumePrint />} />
 
       {/* Admin routes */}
       <Route path="/admin" element={<AdminDashboard />} />

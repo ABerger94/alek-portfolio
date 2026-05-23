@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 
 export default function Navbar({ builderName = "NEURAL ARCHITECT" }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -44,6 +47,13 @@ export default function Navbar({ builderName = "NEURAL ARCHITECT" }) {
               {link.label}
             </a>
           ))}
+          <Link
+            to="/resume"
+            className="inline-flex items-center gap-1.5 font-mono-ui text-xs text-ion border border-ion/30 hover:border-ion/70 hover:bg-ion/5 transition-all duration-200 tracking-widest uppercase px-3 py-1.5 min-h-[44px] items-center"
+          >
+            <Download size={11} />
+            PDF
+          </Link>
           <Link
             to="/admin"
             className="font-mono-ui text-xs text-circuit hover:text-ion transition-colors duration-200 tracking-widest uppercase opacity-40 hover:opacity-80"
