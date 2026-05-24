@@ -148,15 +148,82 @@ export default function HeroSection({ settings, projects = [] }) {
                 WORK WITH ME
               </a>
             </motion.div>
+
+            {/* Mobile Portfolio Vitality Widget */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="glass-pane p-5 mt-8 lg:hidden"
+              aria-label="Portfolio vitality stats"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-mono-ui text-xs text-circuit tracking-widest uppercase">Portfolio Vitality</span>
+                <div className="flex items-center gap-2">
+                  <div className="pulse-dot" aria-hidden="true" />
+                  <span className="font-mono-ui text-xs text-ion">LIVE</span>
+                </div>
+              </div>
+              {(() => {
+                const allTags = [...new Set(projects.flatMap(p => p.tech_stack || []))];
+                const newestProject = projects[0];
+                const newestDate = newestProject?.created_date
+                  ? new Date(newestProject.created_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                  : null;
+                return (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Active Projects</p>
+                        <p className="font-display text-ion" style={{ fontSize: '2rem', lineHeight: 1 }}>{count}</p>
+                      </div>
+                      <div>
+                        <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Avg Build</p>
+                        <p className="font-display text-ion" style={{ fontSize: '2rem', lineHeight: 1 }}>{settings?.avg_build_time || '< 5d'}</p>
+                      </div>
+                    </div>
+                    <div className="h-px bg-ion/10" />
+                    <div>
+                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Tokens Orchestrated</p>
+                      <p className="font-display text-ion" style={{ fontSize: '1.75rem', lineHeight: 1 }}>{settings?.tokens_orchestrated || '—'}</p>
+                    </div>
+                    <div className="h-px bg-ion/10" />
+                    <div>
+                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-2">Tech Stack Depth</p>
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 h-1 bg-ion/20 rounded-full overflow-hidden">
+                          <div className="h-full bg-ion rounded-full" style={{ width: `${Math.min(allTags.length * 4, 100)}%` }} />
+                        </div>
+                        <span className="font-mono-ui text-xs text-ion whitespace-nowrap">{allTags.length} TECHS</span>
+                      </div>
+                    </div>
+                    {newestDate && (
+                      <>
+                        <div className="h-px bg-ion/10" />
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono-ui text-xs text-circuit">LAST SHIP</span>
+                          <span className="font-mono-ui text-xs text-ion">{newestDate}</span>
+                        </div>
+                      </>
+                    )}
+                    <div className="h-px bg-ion/10" />
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono-ui text-xs text-circuit">STATUS</span>
+                      <span className="font-mono-ui text-xs text-ion">BUILDING</span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </motion.div>
           </div>
 
-          {/* Right: System Vitality Widget */}
+          {/* Right: Portfolio Vitality Widget — desktop only */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="glass-pane p-6 hidden lg:block"
-            aria-label="System vitality stats"
+            aria-label="Portfolio vitality stats"
           >
             <div className="flex items-center justify-between mb-6">
               <span className="font-mono-ui text-xs text-circuit tracking-widest uppercase">Portfolio Vitality</span>
