@@ -154,32 +154,21 @@ export default function ResumePrint() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {projects.map((project, idx) => (
                     <div key={project.id} style={{ pageBreakInside: 'avoid' }}>
-                      {/* Title row + thumbnail */}
-                      <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', marginBottom: '8px' }}>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                            <h3 style={{ fontFamily: 'Inter Tight, sans-serif', fontSize: '15px', fontWeight: 800, color: '#020204', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
-                              <span style={{ color: '#00F5FF', fontSize: '11px', marginRight: '8px', fontFamily: 'monospace' }}>{String(idx + 1).padStart(2, '0')}</span>
-                              {project.title}
-                            </h3>
-                            {project.live_url && (
-                              <span style={{ fontSize: '8.5px', color: '#00F5FF', fontFamily: 'monospace', flexShrink: 0, marginLeft: '8px' }}>↗ {project.live_url}</span>
-                            )}
-                          </div>
-                          {project.tagline && (
-                            <p style={{ fontSize: '10.5px', color: '#555', fontStyle: 'italic', margin: 0 }}>{project.tagline}</p>
-                          )}
-                        </div>
-                        {project.thumbnail_url && (
-                          <img
-                            src={project.thumbnail_url}
-                            alt={project.title}
-                            style={{ width: '110px', height: '68px', objectFit: 'cover', border: '1px solid rgba(0,245,255,0.4)', flexShrink: 0 }}
-                          />
+                      {/* Title row */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
+                        <h3 style={{ fontFamily: 'Inter Tight, sans-serif', fontSize: '15px', fontWeight: 800, color: '#020204', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
+                          <span style={{ color: '#00F5FF', fontSize: '11px', marginRight: '8px', fontFamily: 'monospace' }}>{String(idx + 1).padStart(2, '0')}</span>
+                          {project.title}
+                        </h3>
+                        {project.live_url && (
+                          <span style={{ fontSize: '8.5px', color: '#00F5FF', fontFamily: 'monospace', flexShrink: 0, marginLeft: '8px' }}>↗ {project.live_url}</span>
                         )}
                       </div>
+                      {project.tagline && (
+                        <p style={{ fontSize: '10.5px', color: '#555', fontStyle: 'italic', margin: '2px 0 10px' }}>{project.tagline}</p>
+                      )}
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '10px', marginTop: '8px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '10px' }}>
                         {project.problem_statement && (
                           <div>
                             <div style={{ fontSize: '8px', color: '#00F5FF', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>The Logic</div>
@@ -193,6 +182,15 @@ export default function ResumePrint() {
                           </div>
                         )}
                       </div>
+
+                      {/* Thumbnail — full width below architecture */}
+                      {project.thumbnail_url && (
+                        <img
+                          src={project.thumbnail_url}
+                          alt={project.title}
+                          style={{ width: '100%', height: '180px', objectFit: 'cover', border: '1px solid rgba(0,245,255,0.4)', display: 'block', marginBottom: '10px' }}
+                        />
+                      )}
 
                       {project.ai_collaboration_log && (
                         <div style={{ background: '#000', padding: '10px 14px', marginBottom: '10px' }}>
