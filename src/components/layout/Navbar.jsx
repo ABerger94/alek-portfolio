@@ -54,12 +54,6 @@ export default function Navbar({ builderName = "NEURAL ARCHITECT" }) {
             <Download size={11} />
             PDF
           </Link>
-          <Link
-            to="/admin"
-            className="font-mono-ui text-xs text-circuit hover:text-ion transition-colors duration-200 tracking-widest uppercase opacity-40 hover:opacity-80"
-          >
-            Admin
-          </Link>
         </nav>
 
         {/* Mobile toggle */}
