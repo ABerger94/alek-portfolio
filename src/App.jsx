@@ -22,24 +22,18 @@ const AdminRoute = ({ children }) => {
   const [authState, setAuthState] = React.useState('loading');
 
   React.useEffect(() => {
-    // Check if there's a stored token (handles post-login redirect case)
-    const storedToken = localStorage.getItem('base44_access_token');
-    if (!storedToken) {
-      // No token at all — send to login
-      base44.auth.redirectToLogin(window.location.origin + '/admin');
-      return;
-    }
-
-    base44.auth.me().then(user => {
+    base44.auth.isAuthenticated().then(async (authed) => {
+      if (!authed) {
+        base44.auth.redirectToLogin(window.location.origin + '/admin');
+        return;
+      }
+      const user = await base44.auth.me();
       if (user && user.role === 'admin') {
         setAuthState('admin');
-      } else if (user) {
-        setAuthState('forbidden');
       } else {
-        base44.auth.redirectToLogin(window.location.origin + '/admin');
+        // Logged in but not admin — go home
+        setAuthState('forbidden');
       }
-    }).catch(() => {
-      base44.auth.redirectToLogin(window.location.origin + '/admin');
     });
   }, []);
 

@@ -1,22 +1,11 @@
-import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
-import { useEffect, useState } from 'react';
 
 export default function Footer({ settings }) {
   const name = settings?.builder_name || '';
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    base44.auth.me().then(user => {
-      if (user?.role === 'admin') setIsAdmin(true);
-    }).catch(() => {});
-  }, []);
 
   const handleAdminClick = (e) => {
-    if (!isAdmin) {
-      e.preventDefault();
-      base44.auth.redirectToLogin(window.location.origin + '/admin');
-    }
+    e.preventDefault();
+    base44.auth.redirectToLogin(window.location.origin + '/admin');
   };
 
   return (
@@ -29,13 +18,13 @@ export default function Footer({ settings }) {
           <p className="font-mono-ui text-xs text-circuit/40 tracking-widest">
             BUILT WITH AI. ORCHESTRATED BY HUMAN.
           </p>
-          <Link
-            to="/admin"
+          <a
+            href="#"
             onClick={handleAdminClick}
             className="font-mono-ui text-xs text-circuit/20 hover:text-circuit/50 tracking-widest transition-colors"
           >
             ·
-          </Link>
+          </a>
         </div>
       </div>
     </footer>
