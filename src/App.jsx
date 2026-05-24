@@ -22,19 +22,34 @@ const AdminRoute = ({ children }) => {
   const [authState, setAuthState] = React.useState('loading');
 
   React.useEffect(() => {
-    base44.auth.isAuthenticated().then(async (authed) => {
-      if (!authed) {
+    const checkAuth = async () => {
+      try {
+        const authed = await base44.auth.isAuthenticated();
+        console.log('AdminRoute: isAuthenticated =', authed);
+        
+        if (!authed) {
+          console.log('AdminRoute: not authenticated, redirecting to login');
+          base44.auth.redirectToLogin(window.location.origin + '/admin');
+          return;
+        }
+        
+        const user = await base44.auth.me();
+        console.log('AdminRoute: got user =', user);
+        
+        if (user && user.role === 'admin') {
+          console.log('AdminRoute: user is admin, allowing access');
+          setAuthState('admin');
+        } else {
+          console.log('AdminRoute: user is not admin, forbidden');
+          setAuthState('forbidden');
+        }
+      } catch (error) {
+        console.log('AdminRoute: error during auth check', error);
         base44.auth.redirectToLogin(window.location.origin + '/admin');
-        return;
       }
-      const user = await base44.auth.me();
-      if (user && user.role === 'admin') {
-        setAuthState('admin');
-      } else {
-        // Logged in but not admin — go home
-        setAuthState('forbidden');
-      }
-    });
+    };
+    
+    checkAuth();
   }, []);
 
   if (authState === 'loading') return (
