@@ -12,7 +12,7 @@ const NAV = [
 
 export default function AdminLayout({ children }) {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <div className="flex min-h-screen bg-obsidian">
