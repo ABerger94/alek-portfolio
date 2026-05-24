@@ -159,7 +159,7 @@ export default function HeroSection({ settings, projects = [] }) {
             aria-label="System vitality stats"
           >
             <div className="flex items-center justify-between mb-6">
-              <span className="font-mono-ui text-xs text-circuit tracking-widest uppercase">System Vitality</span>
+              <span className="font-mono-ui text-xs text-circuit tracking-widest uppercase">Portfolio Vitality</span>
               <div className="flex items-center gap-2">
                 <div className="pulse-dot" aria-hidden="true" />
                 <span className="font-mono-ui text-xs text-ion">LIVE</span>
