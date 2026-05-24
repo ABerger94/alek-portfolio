@@ -8,7 +8,7 @@ const STAT_LABELS = [
   { label: 'SYSTEM STATUS', value: 'OPERATIONAL', color: 'text-ion' },
 ];
 
-export default function HeroSection({ settings }) {
+export default function HeroSection({ settings, projects = [] }) {
   const containerRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
   const [count, setCount] = useState(0);
@@ -28,7 +28,7 @@ export default function HeroSection({ settings }) {
 
   // Animated counter
   useEffect(() => {
-    const target = settings?.apps_deployed || 12;
+    const target = settings?.apps_deployed || projects.length || 0;
     const step = Math.ceil(target / 40);
     let current = 0;
     const timer = setInterval(() => {
@@ -37,7 +37,7 @@ export default function HeroSection({ settings }) {
       if (current >= target) clearInterval(timer);
     }, 50);
     return () => clearInterval(timer);
-  }, [settings]);
+  }, [settings, projects]);
 
   const name = settings?.builder_name || 'YOUR NAME';
   const tagline = settings?.tagline || 'I BUILD AT THE SPEED OF THOUGHT.';
@@ -166,53 +166,72 @@ export default function HeroSection({ settings }) {
               </div>
             </div>
 
-            <div className="space-y-5">
-              <div>
-                <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Apps Deployed</p>
-                <p className="font-display text-ion" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
-                  {count}
-                  <span className="text-circuit text-sm ml-1">+</span>
-                </p>
-              </div>
+            {(() => {
+              const publishedCount = projects.length;
+              const allTags = [...new Set(projects.flatMap(p => p.tech_stack || []))];
+              const featuredCount = projects.filter(p => p.featured).length;
+              const newestProject = projects[0];
+              const newestDate = newestProject?.created_date
+                ? new Date(newestProject.created_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                : null;
 
-              <div className="h-px bg-ion/10" />
-
-              <div>
-                <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Tokens Orchestrated</p>
-                <p className="font-display text-ion" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
-                  {settings?.tokens_orchestrated || '47.2M'}
-                </p>
-              </div>
-
-              <div className="h-px bg-ion/10" />
-
-              <div>
-                <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-2">Stack Health</p>
-                <div className="space-y-2">
-                  {['Base44', 'Anthropic API', 'Supabase', 'Vercel'].map((item) => (
-                    <div key={item} className="flex items-center justify-between">
-                      <span className="font-mono-ui text-xs text-circuit">{item}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1 bg-ion/20 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-ion rounded-full"
-                            style={{ width: `${85 + Math.random() * 15}%` }}
-                          />
-                        </div>
-                        <span className="font-mono-ui text-xs text-ion">OK</span>
-                      </div>
+              return (
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Live Projects</p>
+                      <p className="font-display text-ion" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
+                        {count}
+                      </p>
                     </div>
-                  ))}
+                    <div className="text-right">
+                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Featured</p>
+                      <p className="font-display text-ion" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
+                        {featuredCount}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="h-px bg-ion/10" />
+
+                  <div>
+                    <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Tokens Orchestrated</p>
+                    <p className="font-display text-ion" style={{ fontSize: '2rem', lineHeight: 1 }}>
+                      {settings?.tokens_orchestrated || '—'}
+                    </p>
+                  </div>
+
+                  <div className="h-px bg-ion/10" />
+
+                  <div>
+                    <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-2">Tech Stack Depth</p>
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 h-1 bg-ion/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-ion rounded-full transition-all duration-1000" style={{ width: `${Math.min(allTags.length * 4, 100)}%` }} />
+                      </div>
+                      <span className="font-mono-ui text-xs text-ion whitespace-nowrap">{allTags.length} TECHS</span>
+                    </div>
+                  </div>
+
+                  {newestDate && (
+                    <>
+                      <div className="h-px bg-ion/10" />
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono-ui text-xs text-circuit">LAST SHIP</span>
+                        <span className="font-mono-ui text-xs text-ion">{newestDate}</span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="h-px bg-ion/10" />
+
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono-ui text-xs text-circuit">STATUS</span>
+                    <span className="font-mono-ui text-xs text-ion">BUILDING</span>
+                  </div>
                 </div>
-              </div>
-
-              <div className="h-px bg-ion/10" />
-
-              <div className="flex items-center justify-between">
-                <span className="font-mono-ui text-xs text-circuit">SYSTEM STATUS</span>
-                <span className="font-mono-ui text-xs text-ion">OPERATIONAL</span>
-              </div>
-            </div>
+              );
+            })()}
           </motion.div>
         </div>
       </div>

@@ -75,7 +75,7 @@ export default function Home() {
       <Navbar builderName={settings?.builder_name || 'NEURAL ARCHITECT'} />
 
       <main id="main-content">
-        <HeroSection settings={settings} />
+        <HeroSection settings={settings} projects={projects} />
         <ProjectsSection projects={projects} />
         <AboutSection settings={settings} projects={projects} />
         <ContactSection />
