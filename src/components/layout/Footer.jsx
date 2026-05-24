@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export default function Footer({ settings }) {
-  const name = settings?.builder_name || 'NEURAL ARCHITECT';
+  const name = settings?.builder_name || '';
   return (
     <footer className="border-t border-ion/10 py-12">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">

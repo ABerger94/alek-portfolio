@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Download } from 'lucide-react';
 
-export default function Navbar({ builderName = "NEURAL ARCHITECT" }) {
+export default function Navbar({ builderName }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
