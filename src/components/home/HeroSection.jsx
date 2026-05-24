@@ -79,7 +79,7 @@ export default function HeroSection({ settings }) {
               transition={{ duration: 0.6 }}
               className="font-mono-ui text-xs text-ion tracking-widest mb-6 uppercase"
             >
-              ◈ Neural Architect / AI Native Builder
+              ◈ AI Native Builder
             </motion.p>
 
             {/* Stroke name behind */}
