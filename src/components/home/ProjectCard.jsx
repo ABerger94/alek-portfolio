@@ -57,7 +57,7 @@ export default function ProjectCard({ project, index }) {
         <h3 className="font-display text-pure-white mb-2 group-hover:text-ion transition-colors duration-200" style={{ fontSize: '1.4rem' }}>
           {project.title}
         </h3>
-        <p className="text-circuit text-sm mb-5 line-clamp-2" style={{ fontSize: '0.875rem' }}>
+        <p className="text-circuit text-sm mb-5" style={{ fontSize: '0.875rem' }}>
           {project.tagline}
         </p>
 
