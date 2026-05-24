@@ -19,20 +19,27 @@ import AdminSettings from './pages/admin/AdminSettings';
 import ResumePrint from './pages/ResumePrint';
 
 const AdminRoute = ({ children }) => {
-  const [authState, setAuthState] = React.useState('loading'); // 'loading' | 'admin' | 'redirect'
+  const [authState, setAuthState] = React.useState('loading');
 
   React.useEffect(() => {
+    // Check if there's a stored token (handles post-login redirect case)
+    const storedToken = localStorage.getItem('base44_access_token');
+    if (!storedToken) {
+      // No token at all — send to login
+      base44.auth.redirectToLogin(window.location.origin + '/admin');
+      return;
+    }
+
     base44.auth.me().then(user => {
       if (user && user.role === 'admin') {
         setAuthState('admin');
-      } else if (!user) {
-        setAuthState('redirect');
-      } else {
-        // Logged in but not admin
+      } else if (user) {
         setAuthState('forbidden');
+      } else {
+        base44.auth.redirectToLogin(window.location.origin + '/admin');
       }
     }).catch(() => {
-      setAuthState('redirect');
+      base44.auth.redirectToLogin(window.location.origin + '/admin');
     });
   }, []);
 
@@ -41,11 +48,6 @@ const AdminRoute = ({ children }) => {
       <div className="w-8 h-8 border-2 border-ion/30 border-t-ion rounded-full animate-spin"></div>
     </div>
   );
-
-  if (authState === 'redirect') {
-    base44.auth.redirectToLogin(window.location.origin + '/admin');
-    return null;
-  }
 
   if (authState === 'forbidden') return <Navigate to="/" replace />;
 
