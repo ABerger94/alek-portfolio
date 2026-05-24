@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight, Github, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function ProjectCard({ project, index }) {
@@ -89,15 +89,40 @@ export default function ProjectCard({ project, index }) {
           </div>
         </div>
 
-        {/* CTA */}
-        <Link
-          to={`/project/${project.id}`}
-          className="inline-flex items-center gap-2 font-mono-ui text-xs text-ion tracking-widest hover:gap-4 transition-all duration-200 min-h-[44px]"
-          aria-label={`View case study: ${project.title}`}
-        >
-          VIEW CASE STUDY
-          <ArrowRight size={12} />
-        </Link>
+        {/* CTA row */}
+        <div className="flex items-center gap-4 flex-wrap">
+          <Link
+            to={`/project/${project.id}`}
+            className="inline-flex items-center gap-2 font-mono-ui text-xs text-ion tracking-widest hover:gap-4 transition-all duration-200 min-h-[44px]"
+            aria-label={`View case study: ${project.title}`}
+          >
+            VIEW CASE STUDY
+            <ArrowRight size={12} />
+          </Link>
+          {project.github_url && (
+            <a
+              href={project.github_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1.5 font-mono-ui text-xs text-circuit hover:text-ion tracking-widest transition-colors min-h-[44px]"
+              aria-label={`GitHub repo: ${project.title}`}
+            >
+              <Github size={12} /> GITHUB
+            </a>
+          )}
+          {project.download_url && (
+            <a
+              href={project.download_url}
+              download
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1.5 font-mono-ui text-xs text-circuit hover:text-ion tracking-widest transition-colors min-h-[44px]"
+              aria-label={`Download files: ${project.title}`}
+            >
+              <Download size={12} /> DOWNLOAD
+            </a>
+          )}
+        </div>
       </div>
     </motion.div>
   );

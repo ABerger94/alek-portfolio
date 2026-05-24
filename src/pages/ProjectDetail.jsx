@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { ExternalLink, ArrowLeft, Copy, Check } from 'lucide-react';
+import { ExternalLink, ArrowLeft, Copy, Check, Github, Download } from 'lucide-react';
 
 function TerminalBlock({ content, title }) {
   const [copied, setCopied] = useState(false);
@@ -135,19 +135,42 @@ export default function ProjectDetail() {
             </h1>
             <p className="text-circuit text-xl mb-8">{project.tagline}</p>
 
-            {/* Live link */}
-            {project.live_url && (
-              <a
-                href={project.live_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 glass-pane px-6 py-3 font-mono-ui text-xs text-ion tracking-widest hover:bg-ion/5 transition-colors min-h-[44px]"
-              >
-                <div className="pulse-dot" />
-                OPEN LIVE APP
-                <ExternalLink size={12} />
-              </a>
-            )}
+            {/* Links row */}
+            <div className="flex flex-wrap gap-3">
+              {project.live_url && (
+                <a
+                  href={project.live_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 glass-pane px-6 py-3 font-mono-ui text-xs text-ion tracking-widest hover:bg-ion/5 transition-colors min-h-[44px]"
+                >
+                  <div className="pulse-dot" />
+                  OPEN LIVE APP
+                  <ExternalLink size={12} />
+                </a>
+              )}
+              {project.github_url && (
+                <a
+                  href={project.github_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 glass-pane px-6 py-3 font-mono-ui text-xs text-circuit hover:text-ion tracking-widest hover:bg-ion/5 transition-colors min-h-[44px]"
+                >
+                  <Github size={12} />
+                  VIEW ON GITHUB
+                </a>
+              )}
+              {project.download_url && (
+                <a
+                  href={project.download_url}
+                  download
+                  className="inline-flex items-center gap-3 glass-pane px-6 py-3 font-mono-ui text-xs text-circuit hover:text-ion tracking-widest hover:bg-ion/5 transition-colors min-h-[44px]"
+                >
+                  <Download size={12} />
+                  DOWNLOAD FILES
+                </a>
+              )}
+            </div>
           </motion.div>
         </div>
 

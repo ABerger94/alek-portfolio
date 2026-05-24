@@ -7,7 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 import { Save, ArrowLeft, Upload, Plus, X } from 'lucide-react';
 
 const EMPTY_PROJECT = {
-  title: '', tagline: '', thumbnail_url: '', live_url: '', video_embed_url: '',
+  title: '', tagline: '', thumbnail_url: '', live_url: '', github_url: '', download_url: '', video_embed_url: '',
   problem_statement: '', architecture: '', ai_collaboration_log: '',
   tech_stack: [], status: 'draft', display_order: 99
 };
@@ -21,6 +21,7 @@ export default function ProjectEditor() {
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingDownload, setUploadingDownload] = useState(false);
   const [newTag, setNewTag] = useState('');
 
   useEffect(() => {
@@ -52,6 +53,15 @@ export default function ProjectEditor() {
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
     set('thumbnail_url', file_url);
     setUploading(false);
+  };
+
+  const handleDownloadFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingDownload(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    set('download_url', file_url);
+    setUploadingDownload(false);
   };
 
   const addTag = () => {
@@ -150,6 +160,23 @@ export default function ProjectEditor() {
                 <label className={labelClass}>Video Walkthrough URL</label>
                 <input type="url" value={project.video_embed_url} onChange={e => set('video_embed_url', e.target.value)}
                   className={inputClass} placeholder="Loom or YouTube URL" />
+              </div>
+              <div>
+                <label className={labelClass}>GitHub Repository URL</label>
+                <input type="url" value={project.github_url} onChange={e => set('github_url', e.target.value)}
+                  className={inputClass} placeholder="https://github.com/..." />
+              </div>
+              <div>
+                <label className={labelClass}>Download File URL</label>
+                <input type="url" value={project.download_url} onChange={e => set('download_url', e.target.value)}
+                  className={inputClass} placeholder="https://... or upload below" />
+                <div className="mt-2">
+                  <label className="inline-flex items-center gap-2 border border-ion/20 text-circuit hover:text-ion font-mono-ui text-xs tracking-widest px-4 py-2 cursor-pointer hover:border-ion/40 transition-colors min-h-[44px]">
+                    <Upload size={12} />
+                    {uploadingDownload ? 'UPLOADING...' : 'UPLOAD ARCHIVE'}
+                    <input type="file" onChange={handleDownloadFile} className="hidden" />
+                  </label>
+                </div>
               </div>
             </div>
           </div>

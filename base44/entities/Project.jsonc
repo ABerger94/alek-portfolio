@@ -18,6 +18,14 @@
       "type": "string",
       "description": "Live app URL"
     },
+    "github_url": {
+      "type": "string",
+      "description": "GitHub repository URL for the project"
+    },
+    "download_url": {
+      "type": "string",
+      "description": "URL to download the project workspace/archive file"
+    },
     "video_embed_url": {
       "type": "string",
       "description": "Loom or YouTube embed URL for the walkthrough video"
