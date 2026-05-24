@@ -132,7 +132,7 @@ export default function HeroSection({ settings, projects = [] }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-wrap gap-4"
+              className="hidden lg:flex flex-wrap gap-4"
             >
               <a
                 href="#projects"
@@ -214,6 +214,28 @@ export default function HeroSection({ settings, projects = [] }) {
                   </div>
                 );
               })()}
+            </motion.div>
+
+            {/* Mobile CTA buttons — below widget */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="flex flex-wrap gap-4 mt-6 lg:hidden"
+            >
+              <a
+                href="#projects"
+                className="inline-flex items-center gap-3 bg-ion text-obsidian font-display text-xs tracking-widest px-8 py-4 min-h-[44px] hover:bg-ion/90 transition-all duration-200 neural-glow-strong"
+              >
+                VIEW PROJECTS
+                <ArrowDown size={14} />
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-3 border border-ion/30 text-ion font-display text-xs tracking-widest px-8 py-4 min-h-[44px] hover:border-ion/70 hover:bg-ion/5 transition-all duration-200"
+              >
+                WORK WITH ME
+              </a>
             </motion.div>
           </div>
 
