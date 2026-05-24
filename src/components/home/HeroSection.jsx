@@ -178,7 +178,7 @@ export default function HeroSection({ settings, projects = [] }) {
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Live Projects</p>
+                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Published</p>
                       <p className="font-display text-ion" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
                         {count}
                       </p>
