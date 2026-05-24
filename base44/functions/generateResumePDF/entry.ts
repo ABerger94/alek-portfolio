@@ -130,29 +130,48 @@ Deno.serve(async (req) => {
     y += 20;
 
     // ── SKILLS ────────────────────────────────────────────────────────────────
-    if (s.skills?.length) {
-      sectionLine('Skills & Stack');
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.setTextColor(40, 40, 50);
-      // Render as pill-like inline tags
-      let tx = MARGIN;
-      const skillY = y;
-      let rowY = skillY;
-      for (const skill of s.skills) {
-        const tw = doc.getTextWidth(skill) + 6;
-        if (tx + tw > W - MARGIN) {
-          tx = MARGIN;
-          rowY += 9;
-          checkPage(9);
+    {
+      // Merge profile skills + most-used project tags
+      const profileSkills = s.skills || [];
+      const tagCount = {};
+      for (const p of projects || []) {
+        for (const t of (p.tech_stack || [])) {
+          tagCount[t] = (tagCount[t] || 0) + 1;
         }
-        doc.setFillColor(240, 248, 255);
-        doc.roundedRect(tx, rowY - 5, tw, 7, 1, 1, 'F');
-        doc.setTextColor(2, 2, 4);
-        doc.text(skill, tx + 3, rowY);
-        tx += tw + 3;
       }
-      y = rowY + 10;
+      const topProjectTags = Object.entries(tagCount)
+        .sort((a, b) => b[1] - a[1])
+        .map(([tag]) => tag);
+      const normalize = (str) => str.toLowerCase().replace(/[\s\-_.]+/g, '');
+      const seen = new Map();
+      for (const skill of [...profileSkills, ...topProjectTags]) {
+        const key = normalize(skill);
+        if (!seen.has(key)) seen.set(key, skill);
+      }
+      const allSkills = [...seen.values()];
+
+      if (allSkills.length) {
+        sectionLine('Skills & Stack');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(40, 40, 50);
+        let tx = MARGIN;
+        let rowY = y;
+        for (const skill of allSkills) {
+          const tw = doc.getTextWidth(skill) + 6;
+          if (tx + tw > W - MARGIN) {
+            tx = MARGIN;
+            rowY += 9;
+            checkPage(9);
+          }
+          doc.setFillColor(240, 248, 255);
+          doc.roundedRect(tx, rowY - 5, tw, 7, 1, 1, 'F');
+          doc.setTextColor(2, 2, 4);
+          doc.text(skill, tx + 3, rowY);
+          tx += tw + 3;
+        }
+        y = rowY + 10;
+      }
     }
 
     // ── PROJECTS ──────────────────────────────────────────────────────────────
@@ -161,28 +180,54 @@ Deno.serve(async (req) => {
     for (const [idx, project] of publishedProjects.entries()) {
       checkPage(50);
 
+      // Thumbnail image (right side, 35x22mm)
+      const THUMB_W = 35;
+      const THUMB_H = 22;
+      const thumbX = W - MARGIN - THUMB_W;
+      const thumbStartY = y - 4;
+      if (project.thumbnail_url) {
+        try {
+          const imgResp = await fetch(project.thumbnail_url);
+          if (imgResp.ok) {
+            const imgBuf = await imgResp.arrayBuffer();
+            const imgBytes = new Uint8Array(imgBuf);
+            const base64 = btoa(String.fromCharCode(...imgBytes));
+            const contentType = imgResp.headers.get('content-type') || 'image/jpeg';
+            const format = contentType.includes('png') ? 'PNG' : 'JPEG';
+            doc.addImage(`data:${contentType};base64,${base64}`, format, thumbX, thumbStartY, THUMB_W, THUMB_H);
+            // Thin cyan border around thumbnail
+            doc.setDrawColor(0, 245, 255);
+            doc.setLineWidth(0.3);
+            doc.rect(thumbX, thumbStartY, THUMB_W, THUMB_H);
+          }
+        } catch (_) { /* skip if image fails */ }
+      }
+
+      const textW = project.thumbnail_url ? CONTENT_W - THUMB_W - 5 : CONTENT_W;
+
       // Project number + title
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(12);
       doc.setTextColor(2, 2, 4);
       doc.text(`${String(idx + 1).padStart(2, '0')}  ${project.title || ''}`, MARGIN, y);
 
-      // Live link
+      // Live link (below title, left side)
       if (project.live_url) {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(7.5);
         doc.setTextColor(0, 245, 255);
-        doc.text('↗ ' + project.live_url, W - MARGIN, y, { align: 'right' });
+        doc.text('↗ ' + project.live_url, MARGIN, y + 5);
       }
-      y += 5;
+      y += project.live_url ? 10 : 5;
 
       // Tagline
       if (project.tagline) {
         doc.setFont('helvetica', 'italic');
         doc.setFontSize(9);
         doc.setTextColor(80, 80, 100);
-        doc.text(project.tagline, MARGIN, y);
-        y += 6;
+        const taglineLines = wrapText(project.tagline, textW, 9);
+        doc.text(taglineLines, MARGIN, y);
+        y += taglineLines.length * 5 + 1;
       }
 
       // THE LOGIC
@@ -195,10 +240,15 @@ Deno.serve(async (req) => {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(8.5);
         doc.setTextColor(40, 40, 50);
-        const lines = wrapText(project.problem_statement, CONTENT_W, 8.5);
+        const lines = wrapText(project.problem_statement, textW, 8.5);
         checkPage(lines.length * 4.5 + 4);
         doc.text(lines, MARGIN, y);
         y += lines.length * 4.5 + 3;
+      }
+
+      // Ensure y clears the thumbnail before continuing
+      if (project.thumbnail_url) {
+        y = Math.max(y, thumbStartY + THUMB_H + 4);
       }
 
       // ARCHITECTURE
