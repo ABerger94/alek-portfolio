@@ -77,7 +77,7 @@ export default function Home() {
       <main id="main-content">
         <HeroSection settings={settings} />
         <ProjectsSection projects={projects} />
-        <AboutSection settings={settings} />
+        <AboutSection settings={settings} projects={projects} />
         <ContactSection />
       </main>
 
