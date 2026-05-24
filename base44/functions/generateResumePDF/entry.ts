@@ -84,6 +84,7 @@ Deno.serve(async (req) => {
     doc.setTextColor(142, 145, 150);
     const contactItems = [
       s.email,
+      s.apps_website_url ? s.apps_website_url.replace('https://', '') : null,
       s.github_url ? 'GitHub: ' + s.github_url.replace('https://', '') : null,
       s.linkedin_url ? 'LinkedIn: ' + s.linkedin_url.replace('https://www.linkedin.com/in/', '') : null,
     ].filter(Boolean);

@@ -41,6 +41,10 @@
     "email": {
       "type": "string"
     },
+    "apps_website_url": {
+      "type": "string",
+      "description": "URL to apps/portfolio website"
+    },
     "tokens_orchestrated": {
       "type": "string",
       "description": "Display string for hero widget e.g. '47.2M'"
