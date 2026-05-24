@@ -83,6 +83,7 @@ export default function ResumePrint() {
               {/* Contact block */}
               <div style={{ textAlign: 'right', fontSize: '9.5px', color: '#8E9196', fontFamily: 'monospace', lineHeight: 2, flexShrink: 0 }}>
                 {s.email && <div>{s.email}</div>}
+                {s.apps_website_url && <div style={{ color: '#00F5FF' }}>{s.apps_website_url.replace(/^https?:\/\//, '')}</div>}
                 {s.github_url && <div>{s.github_url.replace('https://', '')}</div>}
                 {s.linkedin_url && <div>{s.linkedin_url.replace('https://', '')}</div>}
               </div>

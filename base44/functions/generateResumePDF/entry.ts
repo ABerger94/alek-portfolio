@@ -84,13 +84,17 @@ Deno.serve(async (req) => {
     doc.setTextColor(142, 145, 150);
     const contactItems = [
       s.email ? s.email : null,
-      s.apps_website_url ? '🌐 ' + s.apps_website_url.replace(/^https?:\/\//, '') : null,
+      s.apps_website_url ? s.apps_website_url.replace(/^https?:\/\//, '') : null,
       s.github_url ? 'gh: ' + s.github_url.replace(/^https?:\/\/(www\.)?github\.com\//, '') : null,
       s.linkedin_url ? 'li: ' + s.linkedin_url.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, '') : null,
     ].filter(Boolean);
     contactItems.forEach((item, i) => {
+      // Highlight the apps URL in cyan
+      const isAppsUrl = s.apps_website_url && item === s.apps_website_url.replace(/^https?:\/\//, '');
+      doc.setTextColor(isAppsUrl ? 0 : 142, isAppsUrl ? 245 : 145, isAppsUrl ? 255 : 150);
       doc.text(item, W - MARGIN, 20 + i * 7, { align: 'right' });
     });
+    doc.setTextColor(142, 145, 150);
 
     y = 76;
 
