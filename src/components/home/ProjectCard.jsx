@@ -65,7 +65,7 @@ export default function ProjectCard({ project, index }) {
         <div className="grid grid-cols-3 gap-3 mb-5 border-t border-ion/10 pt-5">
           <div>
             <p className="font-mono-ui text-xs text-ion/60 tracking-widest uppercase mb-1">Logic</p>
-            <p className="text-xs text-circuit line-clamp-3" style={{ fontSize: '0.75rem' }}>
+            <p className="text-xs text-circuit" style={{ fontSize: '0.75rem' }}>
               {project.problem_statement || '—'}
             </p>
           </div>
