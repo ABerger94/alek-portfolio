@@ -20,6 +20,7 @@ export default function Home() {
       ]);
       setProjects(projs || []);
       setSettings(setts?.[0] || null);
+      document.title = `${setts?.[0]?.builder_name || "Alek"}'s Portfolio`;
       setLoading(false);
     };
     load();
