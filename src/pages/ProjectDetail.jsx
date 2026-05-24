@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
@@ -106,8 +107,43 @@ export default function ProjectDetail() {
 
   const embedUrl = getEmbedUrl(project.video_embed_url);
 
+  const builderName = settings?.builder_name || 'Alek';
+  const pageTitle = `${project.title} — ${builderName}'s Portfolio`;
+  const description = project.tagline || project.problem_statement?.slice(0, 160) || `A project by ${builderName}.`;
+  const pageUrl = window.location.href;
+
   return (
     <div className="bg-obsidian min-h-screen">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={pageUrl} />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        {project.thumbnail_url && <meta property="og:image" content={project.thumbnail_url} />}
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+        {project.thumbnail_url && <meta name="twitter:image" content={project.thumbnail_url} />}
+
+        {/* Structured Data */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          "name": project.title,
+          "description": description,
+          "url": pageUrl,
+          "author": { "@type": "Person", "name": builderName },
+          "image": project.thumbnail_url || undefined,
+        })}</script>
+      </Helmet>
+
       <Navbar builderName={settings?.builder_name || 'NEURAL ARCHITECT'} />
 
       <main className="pt-24">
