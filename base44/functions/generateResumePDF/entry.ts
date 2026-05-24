@@ -110,8 +110,8 @@ Deno.serve(async (req) => {
     y += 2;
     const stats = [
       { label: 'APPS DEPLOYED', value: String(s.apps_deployed || '12+') },
-      { label: 'TOKENS ORCHESTRATED', value: s.tokens_orchestrated || '47.2M' },
-      { label: 'MVP SPEED', value: '< 5 DAYS' },
+      { label: 'TOKENS ORCHESTRATED', value: s.tokens_orchestrated || '—' },
+      { label: 'AVG BUILD TIME', value: (s.avg_build_time || '< 5 DAYS').toUpperCase() },
     ];
     const boxW = CONTENT_W / 3 - 3;
     stats.forEach((stat, i) => {
@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
     }
 
     // ── PROJECTS ──────────────────────────────────────────────────────────────
-    sectionLine('Featured Projects');
+    sectionLine('Active Projects');
 
     for (const [idx, project] of publishedProjects.entries()) {
       checkPage(50);

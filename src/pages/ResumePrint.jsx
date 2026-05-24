@@ -104,8 +104,8 @@ export default function ResumePrint() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                 {[
                   { label: 'Apps Deployed', value: String(s.apps_deployed || '12+') },
-                  { label: 'Tokens Orchestrated', value: s.tokens_orchestrated || '47.2M' },
-                  { label: 'MVP Speed', value: '< 5 Days' },
+                  { label: 'Tokens Orchestrated', value: s.tokens_orchestrated || '—' },
+                  { label: 'Avg Build Time', value: s.avg_build_time || '< 5 Days' },
                 ].map(stat => (
                   <div key={stat.label} style={{ background: '#F5F8FC', padding: '12px', textAlign: 'center' }}>
                     <div style={{ fontFamily: 'Inter Tight, sans-serif', fontSize: '20px', fontWeight: 800, color: '#020204', lineHeight: 1 }}>{stat.value}</div>
@@ -132,7 +132,7 @@ export default function ResumePrint() {
             {/* ── PROJECTS ── */}
             {projects.length > 0 && (
               <section>
-                <SectionLabel>Featured Projects</SectionLabel>
+                <SectionLabel>Active Projects</SectionLabel>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {projects.map((project, idx) => (
                     <div key={project.id} style={{ pageBreakInside: 'avoid' }}>
