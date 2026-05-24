@@ -9,7 +9,13 @@ const DEFAULT_SKILLS = [
 export default function AboutSection({ settings, projects = [] }) {
   const baseSkills = settings?.skills?.length ? settings.skills : DEFAULT_SKILLS;
   const projectTags = projects.flatMap(p => p.tech_stack || []);
-  const skills = [...new Set([...baseSkills, ...projectTags])];
+  const normalize = (s) => s.toLowerCase().replace(/[\s\-_\.]+/g, '');
+  const seen = new Map();
+  for (const skill of [...baseSkills, ...projectTags]) {
+    const key = normalize(skill);
+    if (!seen.has(key)) seen.set(key, skill);
+  }
+  const skills = [...seen.values()];
   const bio = settings?.bio || 'I build production-grade software at the speed of thought — fusing deep product intuition with AI orchestration to ship in days, not months. Startups and growth-stage companies hire me when they need something real, fast, and fully functional.';
 
   return (
