@@ -1,3 +1,4 @@
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { base44 } from '@/api/base44Client';
 import { HelmetProvider } from 'react-helmet-async'
@@ -19,17 +20,36 @@ import AdminSettings from './pages/admin/AdminSettings';
 import ResumePrint from './pages/ResumePrint';
 
 const AdminRoute = ({ children }) => {
-  const { user, isLoadingAuth } = useAuth();
-  if (isLoadingAuth) return (
+  const [authState, setAuthState] = React.useState('loading'); // 'loading' | 'admin' | 'redirect'
+
+  React.useEffect(() => {
+    base44.auth.me().then(user => {
+      if (user && user.role === 'admin') {
+        setAuthState('admin');
+      } else if (!user) {
+        setAuthState('redirect');
+      } else {
+        // Logged in but not admin
+        setAuthState('forbidden');
+      }
+    }).catch(() => {
+      setAuthState('redirect');
+    });
+  }, []);
+
+  if (authState === 'loading') return (
     <div className="fixed inset-0 flex items-center justify-center bg-obsidian">
       <div className="w-8 h-8 border-2 border-ion/30 border-t-ion rounded-full animate-spin"></div>
     </div>
   );
-  if (!user) {
-    base44.auth.redirectToLogin(window.location.href);
+
+  if (authState === 'redirect') {
+    base44.auth.redirectToLogin(window.location.origin + '/admin');
     return null;
   }
-  if (user.role !== 'admin') return <Navigate to="/" replace />;
+
+  if (authState === 'forbidden') return <Navigate to="/" replace />;
+
   return children;
 };
 
