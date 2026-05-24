@@ -67,10 +67,9 @@ const AuthenticatedApp = () => {
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      navigateToLogin();
-      return null;
     }
+    // For 'auth_required' and other errors on a public app, just render the routes.
+    // AdminRoute handles its own auth check and redirect.
   }
 
   return (
