@@ -55,11 +55,11 @@ Deno.serve(async (req) => {
     // ── PAGE 1: Header ────────────────────────────────────────────────────────
     // Dark header band
     doc.setFillColor(2, 2, 4);
-    doc.rect(0, 0, W, 52, 'F');
+    doc.rect(0, 0, W, 58, 'F');
 
     // Accent left bar
     doc.setFillColor(0, 245, 255);
-    doc.rect(0, 0, 4, 52, 'F');
+    doc.rect(0, 0, 4, 58, 'F');
 
     // Name
     doc.setFont('helvetica', 'bold');
@@ -92,7 +92,7 @@ Deno.serve(async (req) => {
       doc.text(item, W - MARGIN, 20 + i * 7, { align: 'right' });
     });
 
-    y = 60;
+    y = 66;
 
     // ── BIO ───────────────────────────────────────────────────────────────────
     if (s.bio) {
