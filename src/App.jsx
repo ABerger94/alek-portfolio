@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster"
+import { base44 } from '@/api/base44Client';
 import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -24,7 +25,11 @@ const AdminRoute = ({ children }) => {
       <div className="w-8 h-8 border-2 border-ion/30 border-t-ion rounded-full animate-spin"></div>
     </div>
   );
-  if (!user || user.role !== 'admin') return <Navigate to="/" replace />;
+  if (!user) {
+    base44.auth.redirectToLogin(window.location.href);
+    return null;
+  }
+  if (user.role !== 'admin') return <Navigate to="/" replace />;
   return children;
 };
 
