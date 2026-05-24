@@ -1,12 +1,7 @@
-import { base44 } from '@/api/base44Client';
+import { Link } from 'react-router-dom';
 
 export default function Footer({ settings }) {
   const name = settings?.builder_name || '';
-
-  const handleAdminClick = (e) => {
-    e.preventDefault();
-    base44.auth.redirectToLogin(window.location.origin + '/admin');
-  };
 
   return (
     <footer className="border-t border-ion/10 py-12">
@@ -18,13 +13,12 @@ export default function Footer({ settings }) {
           <p className="font-mono-ui text-xs text-circuit/40 tracking-widest">
             BUILT WITH AI. ORCHESTRATED BY HUMAN.
           </p>
-          <a
-            href="#"
-            onClick={handleAdminClick}
+          <Link
+            to="/admin-login"
             className="font-mono-ui text-xs text-circuit/20 hover:text-circuit/50 tracking-widest transition-colors"
           >
             ·
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
