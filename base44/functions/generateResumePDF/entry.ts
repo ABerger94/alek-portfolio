@@ -55,11 +55,11 @@ Deno.serve(async (req) => {
     // ── PAGE 1: Header ────────────────────────────────────────────────────────
     // Dark header band
     doc.setFillColor(2, 2, 4);
-    doc.rect(0, 0, W, 58, 'F');
+    doc.rect(0, 0, W, 68, 'F');
 
     // Accent left bar
     doc.setFillColor(0, 245, 255);
-    doc.rect(0, 0, 4, 58, 'F');
+    doc.rect(0, 0, 4, 68, 'F');
 
     // Name
     doc.setFont('helvetica', 'bold');
@@ -83,16 +83,16 @@ Deno.serve(async (req) => {
     doc.setFontSize(7.5);
     doc.setTextColor(142, 145, 150);
     const contactItems = [
-      s.email,
-      s.apps_website_url ? s.apps_website_url.replace('https://', '') : null,
-      s.github_url ? 'GitHub: ' + s.github_url.replace('https://', '') : null,
-      s.linkedin_url ? 'LinkedIn: ' + s.linkedin_url.replace('https://www.linkedin.com/in/', '') : null,
+      s.email ? s.email : null,
+      s.apps_website_url ? '🌐 ' + s.apps_website_url.replace(/^https?:\/\//, '') : null,
+      s.github_url ? 'gh: ' + s.github_url.replace(/^https?:\/\/(www\.)?github\.com\//, '') : null,
+      s.linkedin_url ? 'li: ' + s.linkedin_url.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, '') : null,
     ].filter(Boolean);
     contactItems.forEach((item, i) => {
       doc.text(item, W - MARGIN, 20 + i * 7, { align: 'right' });
     });
 
-    y = 66;
+    y = 76;
 
     // ── BIO ───────────────────────────────────────────────────────────────────
     if (s.bio) {
