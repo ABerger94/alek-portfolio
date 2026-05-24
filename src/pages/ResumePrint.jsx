@@ -116,18 +116,36 @@ export default function ResumePrint() {
             </section>
 
             {/* ── SKILLS ── */}
-            {s.skills?.length > 0 && (
-              <section style={{ marginBottom: '28px' }}>
-                <SectionLabel>Skills & Stack</SectionLabel>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {s.skills.map(skill => (
-                    <span key={skill} style={{ fontSize: '9.5px', background: '#EFF8FF', color: '#0070a0', padding: '3px 9px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </section>
-            )}
+            {(() => {
+              const profileSkills = s.skills || [];
+              const tagCount = {};
+              for (const p of projects) {
+                for (const t of (p.tech_stack || [])) {
+                  tagCount[t] = (tagCount[t] || 0) + 1;
+                }
+              }
+              const topTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).map(([t]) => t);
+              const normalize = (str) => str.toLowerCase().replace(/[\s\-_.]+/g, '');
+              const seen = new Map();
+              for (const skill of [...profileSkills, ...topTags]) {
+                const key = normalize(skill);
+                if (!seen.has(key)) seen.set(key, skill);
+              }
+              const allSkills = [...seen.values()];
+              if (!allSkills.length) return null;
+              return (
+                <section style={{ marginBottom: '28px' }}>
+                  <SectionLabel>Skills & Stack</SectionLabel>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {allSkills.map(skill => (
+                      <span key={skill} style={{ fontSize: '9.5px', background: '#EFF8FF', color: '#0070a0', padding: '3px 9px', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+              );
+            })()}
 
             {/* ── PROJECTS ── */}
             {projects.length > 0 && (
@@ -136,22 +154,32 @@ export default function ResumePrint() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {projects.map((project, idx) => (
                     <div key={project.id} style={{ pageBreakInside: 'avoid' }}>
-                      {/* Title row */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                        <h3 style={{ fontFamily: 'Inter Tight, sans-serif', fontSize: '15px', fontWeight: 800, color: '#020204', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
-                          <span style={{ color: '#00F5FF', fontSize: '11px', marginRight: '8px', fontFamily: 'monospace' }}>{String(idx + 1).padStart(2, '0')}</span>
-                          {project.title}
-                        </h3>
-                        {project.live_url && (
-                          <span style={{ fontSize: '8.5px', color: '#00F5FF', fontFamily: 'monospace' }}>↗ {project.live_url}</span>
+                      {/* Title row + thumbnail */}
+                      <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', marginBottom: '8px' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
+                            <h3 style={{ fontFamily: 'Inter Tight, sans-serif', fontSize: '15px', fontWeight: 800, color: '#020204', margin: 0, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
+                              <span style={{ color: '#00F5FF', fontSize: '11px', marginRight: '8px', fontFamily: 'monospace' }}>{String(idx + 1).padStart(2, '0')}</span>
+                              {project.title}
+                            </h3>
+                            {project.live_url && (
+                              <span style={{ fontSize: '8.5px', color: '#00F5FF', fontFamily: 'monospace', flexShrink: 0, marginLeft: '8px' }}>↗ {project.live_url}</span>
+                            )}
+                          </div>
+                          {project.tagline && (
+                            <p style={{ fontSize: '10.5px', color: '#555', fontStyle: 'italic', margin: 0 }}>{project.tagline}</p>
+                          )}
+                        </div>
+                        {project.thumbnail_url && (
+                          <img
+                            src={project.thumbnail_url}
+                            alt={project.title}
+                            style={{ width: '110px', height: '68px', objectFit: 'cover', border: '1px solid rgba(0,245,255,0.4)', flexShrink: 0 }}
+                          />
                         )}
                       </div>
 
-                      {project.tagline && (
-                        <p style={{ fontSize: '10.5px', color: '#555', fontStyle: 'italic', marginBottom: '10px', marginTop: '2px' }}>{project.tagline}</p>
-                      )}
-
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '10px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '10px', marginTop: '8px' }}>
                         {project.problem_statement && (
                           <div>
                             <div style={{ fontSize: '8px', color: '#00F5FF', fontFamily: 'monospace', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>The Logic</div>
