@@ -15,7 +15,7 @@ export default function Footer({ settings }) {
   const handleAdminClick = (e) => {
     if (!isAdmin) {
       e.preventDefault();
-      base44.auth.redirectToLogin('/admin');
+      base44.auth.redirectToLogin(window.location.origin + '/admin');
     }
   };
 
