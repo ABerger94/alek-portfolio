@@ -169,7 +169,6 @@ export default function HeroSection({ settings, projects = [] }) {
             {(() => {
               const publishedCount = projects.length;
               const allTags = [...new Set(projects.flatMap(p => p.tech_stack || []))];
-              const featuredCount = projects.filter(p => p.featured).length;
               const newestProject = projects[0];
               const newestDate = newestProject?.created_date
                 ? new Date(newestProject.created_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -185,9 +184,9 @@ export default function HeroSection({ settings, projects = [] }) {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Featured</p>
-                      <p className="font-display text-ion" style={{ fontSize: '2.5rem', lineHeight: 1 }}>
-                        {featuredCount}
+                      <p className="font-mono-ui text-xs text-circuit tracking-widest uppercase mb-1">Avg Build</p>
+                      <p className="font-display text-ion" style={{ fontSize: '2rem', lineHeight: 1 }}>
+                        {settings?.avg_build_time || '< 5d'}
                       </p>
                     </div>
                   </div>

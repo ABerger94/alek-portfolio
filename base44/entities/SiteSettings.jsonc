@@ -48,6 +48,10 @@
     "apps_deployed": {
       "type": "number",
       "description": "Number of apps deployed for hero widget"
+    },
+    "avg_build_time": {
+      "type": "string",
+      "description": "Average build time display string e.g. '3 days'"
     }
   },
   "required": [
