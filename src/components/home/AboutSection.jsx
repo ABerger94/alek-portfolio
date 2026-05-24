@@ -47,10 +47,11 @@ export default function AboutSection({ settings, projects = [] }) {
             </p>
 
             {/* Quick stats */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
                 { value: settings?.apps_deployed || '12+', label: 'Apps Deployed' },
                 { value: '< 5', label: 'Days Per MVP' },
+                { value: settings?.tokens_orchestrated || '47.2M', label: 'Tokens Orchestrated' },
                 { value: '100%', label: 'AI-Augmented' },
               ].map(({ value, label }) => (
                 <div key={label} className="glass-pane p-4 text-center">
