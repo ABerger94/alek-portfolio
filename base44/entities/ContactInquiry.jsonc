@@ -41,7 +41,7 @@
     "message"
   ],
   "rls": {
-    "create": null,
+    "create": {},
     "read": {
       "user_condition": {
         "role": "admin"
