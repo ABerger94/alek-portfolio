@@ -147,6 +147,11 @@ export default function AdminSettings() {
                 <input type="url" value={settings.twitter_url} onChange={e => set('twitter_url', e.target.value)}
                   className={inputClass} placeholder="https://twitter.com/..." />
               </div>
+              <div>
+                <label className={labelClass}>Apps Website URL</label>
+                <input type="url" value={settings.apps_website_url || ''} onChange={e => set('apps_website_url', e.target.value)}
+                  className={inputClass} placeholder="https://yourportfolio.com" />
+              </div>
             </div>
           </div>
 
