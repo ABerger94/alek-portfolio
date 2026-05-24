@@ -13,18 +13,15 @@ export default function ProjectsSection({ projects }) {
           transition={{ duration: 0.6 }}
         >
           <p className="font-mono-ui text-xs text-ion tracking-widest uppercase mb-4">
-            ◈ Rule of Three / Featured Work
+            ◈ Featured Work
           </p>
           <h2
             id="projects-heading"
             className="font-display text-pure-white mb-4"
             style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
           >
-            NEURAL VAULT
+            THE VAULT
           </h2>
-          <p className="text-circuit max-w-xl" style={{ fontSize: '1rem' }}>
-            Three deeply polished, full-stack products — each a case study in shipping at machine velocity.
-          </p>
         </motion.div>
       </div>
 
