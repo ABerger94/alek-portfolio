@@ -79,7 +79,7 @@ export default function HeroSection({ settings, projects = [] }) {
               transition={{ duration: 0.6 }}
               className="font-mono-ui text-xs text-ion tracking-widest mb-6 uppercase"
             >
-              ◈ AI Native Builder
+              ◈ Building custom AI-powered apps for your business - in days, not weeks or months.
             </motion.p>
 
             {/* Stroke name behind */}
