@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { base44 } from '@/api/base44Client';
 import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider } from '@/lib/AuthContext';
 
@@ -21,7 +21,7 @@ import ResumePrint from './pages/ResumePrint';
 
 const AdminRoute = ({ children }) => {
   const authenticated = sessionStorage.getItem('admin_authenticated') === 'true';
-  
+
   if (!authenticated) {
     return <Navigate to="/admin-login" replace />;
   }
@@ -29,24 +29,43 @@ const AdminRoute = ({ children }) => {
   return children;
 };
 
+const RouteViewTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin')) return;
+
+    base44.functions.invoke('trackPageView', {
+      page_path: location.pathname || '/',
+    }).catch((error) => {
+      console.warn('View tracking failed:', error);
+    });
+  }, [location.pathname]);
+
+  return null;
+};
+
 const AuthenticatedApp = () => {
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Home />} />
-      <Route path="/project/:id" element={<ProjectDetail />} />
-      <Route path="/resume" element={<ResumePrint />} />
-      <Route path="/admin-login" element={<AdminLogin />} />
+    <>
+      <RouteViewTracker />
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+        <Route path="/resume" element={<ResumePrint />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
 
-      {/* Admin routes — password protected */}
-      <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-      <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
-      <Route path="/admin/projects/:id" element={<AdminRoute><ProjectEditor /></AdminRoute>} />
-      <Route path="/admin/inquiries" element={<AdminRoute><AdminInquiries /></AdminRoute>} />
-      <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
+        {/* Admin routes - password protected */}
+        <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+        <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
+        <Route path="/admin/projects/:id" element={<AdminRoute><ProjectEditor /></AdminRoute>} />
+        <Route path="/admin/inquiries" element={<AdminRoute><AdminInquiries /></AdminRoute>} />
+        <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
 
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </>
   );
 };
 

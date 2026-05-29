@@ -1,0 +1,53 @@
+{
+  "name": "PageView",
+  "type": "object",
+  "properties": {
+    "ip_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the visitor IP; raw IP addresses are never stored"
+    },
+    "page_path": {
+      "type": "string",
+      "description": "Most recent public path viewed by this visitor"
+    },
+    "first_seen_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First time this IP/path pair was seen"
+    },
+    "last_seen_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Most recent time this IP/path pair was seen"
+    },
+    "view_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Repeat hits from this same IP"
+    }
+  },
+  "required": [
+    "ip_hash",
+    "page_path",
+    "first_seen_at",
+    "last_seen_at"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": null,
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -5,22 +5,35 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { FolderOpen, MessageSquare, Eye, ArrowRight } from 'lucide-react';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ projects: 0, published: 0, inquiries: 0, unread: 0 });
+  const [stats, setStats] = useState({
+    projects: 0,
+    published: 0,
+    inquiries: 0,
+    unread: 0,
+    uniqueViews: 0,
+    repeatViews: 0,
+    viewsToday: 0,
+  });
   const [recentInquiries, setRecentInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const [projects, inquiries] = await Promise.all([
+      const [projects, inquiries, pageViews] = await Promise.all([
         base44.entities.Project.list('-created_date', 50),
         base44.entities.ContactInquiry.list('-created_date', 5),
+        base44.entities.PageView.list('-created_date', 5000).catch(() => []),
       ]);
       const allInquiries = await base44.entities.ContactInquiry.list('-created_date', 200);
+      const todayKey = new Date().toISOString().slice(0, 10);
       setStats({
         projects: projects.length,
         published: projects.filter(p => p.status === 'published').length,
         inquiries: allInquiries.length,
         unread: allInquiries.filter(i => i.status === 'unread').length,
+        uniqueViews: pageViews.length,
+        repeatViews: pageViews.reduce((sum, view) => sum + Math.max((view.view_count || 1) - 1, 0), 0),
+        viewsToday: pageViews.filter(view => (view.first_seen_at || view.created_date || '').slice(0, 10) === todayKey).length,
       });
       setRecentInquiries(inquiries);
       setLoading(false);
@@ -31,6 +44,7 @@ export default function AdminDashboard() {
   const statCards = [
     { label: 'Total Projects', value: stats.projects, sub: `${stats.published} published`, icon: FolderOpen, href: '/admin/projects' },
     { label: 'Inquiries', value: stats.inquiries, sub: `${stats.unread} unread`, icon: MessageSquare, href: '/admin/inquiries' },
+    { label: 'Unique Views', value: stats.uniqueViews, sub: `${stats.viewsToday} new today / ${stats.repeatViews} repeats ignored`, icon: Eye, href: '/admin' },
   ];
 
   return (
@@ -40,7 +54,7 @@ export default function AdminDashboard() {
         <h1 className="font-display text-pure-white mb-8" style={{ fontSize: '2.5rem' }}>COMMAND CENTER</h1>
 
         {/* Stats */}
-        <div className="grid sm:grid-cols-2 gap-4 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {statCards.map(({ label, value, sub, icon: Icon, href }) => (
             <Link key={label} to={href} className="glass-pane p-6 hover:border-ion/40 transition-all group">
               <div className="flex items-start justify-between mb-4">
