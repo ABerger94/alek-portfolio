@@ -47,7 +47,7 @@ export default function AdminDashboard() {
   const statCards = [
     { label: 'Total Projects', value: stats.projects, sub: `${stats.published} published`, icon: FolderOpen, href: '/admin/projects' },
     { label: 'Inquiries', value: stats.inquiries, sub: `${stats.unread} unread`, icon: MessageSquare, href: '/admin/inquiries' },
-    { label: 'Unique Views', value: stats.uniqueViews, sub: `${stats.viewsToday} new today / ${stats.repeatViews} repeats ignored`, icon: Eye, href: '/admin' },
+    { label: 'Unique Views', value: stats.uniqueViews, sub: `${stats.viewsToday} new today / ${stats.repeatViews} returning`, icon: Eye, href: '/admin/analytics' },
   ];
 
   return (
