@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AnalyticsPanel from '@/components/admin/AnalyticsPanel';
 import { FolderOpen, MessageSquare, Eye, ArrowRight } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -15,11 +16,12 @@ export default function AdminDashboard() {
     viewsToday: 0,
   });
   const [recentInquiries, setRecentInquiries] = useState([]);
+  const [pageViews, setPageViews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const [projects, inquiries, pageViews] = await Promise.all([
+      const [projects, inquiries, views] = await Promise.all([
         base44.entities.Project.list('-created_date', 50),
         base44.entities.ContactInquiry.list('-created_date', 5),
         base44.entities.PageView.list('-created_date', 5000).catch(() => []),
@@ -31,10 +33,11 @@ export default function AdminDashboard() {
         published: projects.filter(p => p.status === 'published').length,
         inquiries: allInquiries.length,
         unread: allInquiries.filter(i => i.status === 'unread').length,
-        uniqueViews: pageViews.length,
-        repeatViews: pageViews.reduce((sum, view) => sum + Math.max((view.view_count || 1) - 1, 0), 0),
-        viewsToday: pageViews.filter(view => (view.first_seen_at || view.created_date || '').slice(0, 10) === todayKey).length,
+        uniqueViews: views.length,
+        repeatViews: views.reduce((sum, view) => sum + Math.max((view.view_count || 1) - 1, 0), 0),
+        viewsToday: views.filter(view => (view.first_seen_at || view.created_date || '').slice(0, 10) === todayKey).length,
       });
+      setPageViews(views);
       setRecentInquiries(inquiries);
       setLoading(false);
     };
@@ -49,7 +52,7 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="max-w-4xl">
+      <div className="max-w-5xl">
         <p className="font-mono-ui text-xs text-ion tracking-widest uppercase mb-2">◈ Admin / Dashboard</p>
         <h1 className="font-display text-pure-white mb-8" style={{ fontSize: '2.5rem' }}>COMMAND CENTER</h1>
 
@@ -71,7 +74,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent inquiries */}
-        <div>
+        <div className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono-ui text-xs text-ion tracking-widest uppercase">Recent Inquiries</p>
             <Link to="/admin/inquiries" className="font-mono-ui text-xs text-circuit hover:text-ion tracking-widest transition-colors">
@@ -101,6 +104,9 @@ export default function AdminDashboard() {
             )}
           </div>
         </div>
+
+        {/* Analytics */}
+        <AnalyticsPanel pageViews={pageViews} loading={loading} />
       </div>
     </AdminLayout>
   );
