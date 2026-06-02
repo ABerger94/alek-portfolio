@@ -17,6 +17,7 @@ import AdminProjects from './pages/admin/AdminProjects';
 import ProjectEditor from './pages/admin/ProjectEditor';
 import AdminInquiries from './pages/admin/AdminInquiries';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
 import ResumePrint from './pages/ResumePrint';
 
 const AdminRoute = ({ children }) => {
@@ -62,6 +63,7 @@ const AuthenticatedApp = () => {
         <Route path="/admin/projects/:id" element={<AdminRoute><ProjectEditor /></AdminRoute>} />
         <Route path="/admin/inquiries" element={<AdminRoute><AdminInquiries /></AdminRoute>} />
         <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
+        <Route path="/admin/analytics" element={<AdminRoute><AdminAnalytics /></AdminRoute>} />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>
