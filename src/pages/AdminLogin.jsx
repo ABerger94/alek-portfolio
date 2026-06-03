@@ -1,24 +1,9 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-
-const ADMIN_PASSWORD = 'alek';
+import { base44 } from '@/api/base44Client';
 
 export default function AdminLogin() {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem('admin_authenticated', 'true');
-      navigate('/admin');
-    } else {
-      setError('Incorrect password');
-      setPassword('');
-    }
+  const handleLogin = () => {
+    base44.auth.redirectToLogin(`${window.location.origin}/admin`);
   };
 
   return (
@@ -30,36 +15,18 @@ export default function AdminLogin() {
             <div className="w-2 h-2 bg-ion rounded-full" />
           </div>
           <h1 className="font-display text-2xl tracking-widest mb-2">ADMIN ACCESS</h1>
-          <p className="font-mono-ui text-xs text-circuit tracking-widest">Enter credentials to proceed</p>
+          <p className="font-mono-ui text-xs text-circuit tracking-widest">Sign in with an admin Base44 account</p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-          <div>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError('');
-              }}
-              className="w-full px-4 py-3 bg-secondary border border-ion/20 text-foreground placeholder-circuit/50 focus:outline-none focus:border-ion focus:ring-1 focus:ring-ion/30 font-mono-ui text-sm"
-              autoFocus
-            />
-          </div>
-
-          {error && (
-            <p className="text-xs text-destructive font-mono-ui tracking-wide">{error}</p>
-          )}
-
+        <div className="space-y-4 mb-8">
           <button
-            type="submit"
+            type="button"
+            onClick={handleLogin}
             className="w-full px-4 py-3 bg-ion text-obsidian font-display text-xs tracking-widest hover:bg-ion/90 transition-colors"
           >
-            ACCESS GRANTED
+            SIGN IN
           </button>
-        </form>
+        </div>
 
         {/* Back link */}
         <a

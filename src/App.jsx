@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { base44 } from '@/api/base44Client';
 import { HelmetProvider } from 'react-helmet-async'
@@ -21,10 +21,60 @@ import AdminAnalytics from './pages/admin/AdminAnalytics';
 import ResumePrint from './pages/ResumePrint';
 
 const AdminRoute = ({ children }) => {
-  const authenticated = sessionStorage.getItem('admin_authenticated') === 'true';
+  const [state, setState] = useState({ loading: true, allowed: false, error: null });
 
-  if (!authenticated) {
+  useEffect(() => {
+    let mounted = true;
+
+    base44.auth.me()
+      .then((user) => {
+        if (!mounted) return;
+        setState({
+          loading: false,
+          allowed: user?.role === 'admin',
+          error: user?.role === 'admin' ? null : 'Admin role required',
+        });
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setState({ loading: false, allowed: false, error: null });
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (state.loading) {
+    return (
+      <div className="min-h-screen bg-obsidian flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-ion/30 border-t-ion rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!state.allowed && !state.error) {
     return <Navigate to="/admin-login" replace />;
+  }
+
+  if (!state.allowed) {
+    return (
+      <div className="min-h-screen bg-obsidian flex items-center justify-center px-6">
+        <div className="w-full max-w-sm text-center">
+          <p className="font-mono-ui text-xs text-ion tracking-widest uppercase mb-3">Access denied</p>
+          <h1 className="font-display text-2xl tracking-widest mb-4">ADMIN ROLE REQUIRED</h1>
+          <p className="font-mono-ui text-xs text-circuit tracking-wide mb-6">
+            Your Base44 account is signed in, but it is not an admin for this app.
+          </p>
+          <button
+            onClick={() => base44.auth.logout('/admin-login')}
+            className="px-4 py-3 bg-ion text-obsidian font-display text-xs tracking-widest hover:bg-ion/90 transition-colors"
+          >
+            SIGN OUT
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return children;

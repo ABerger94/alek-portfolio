@@ -23,13 +23,18 @@ export default function ProjectEditor() {
   const [uploading, setUploading] = useState(false);
   const [uploadingDownload, setUploadingDownload] = useState(false);
   const [newTag, setNewTag] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!isNew) {
-      base44.entities.Project.filter({ id }).then((data) => {
-        if (data?.[0]) setProject(data[0]);
-        setLoading(false);
-      });
+      base44.entities.Project.filter({ id })
+        .then((data) => {
+          if (data?.[0]) setProject(data[0]);
+        })
+        .catch(() => {
+          setError('Unable to load this project. Confirm your Base44 account has admin access.');
+        })
+        .finally(() => setLoading(false));
     }
   }, [id, isNew]);
 
@@ -37,13 +42,31 @@ export default function ProjectEditor() {
 
   const save = async () => {
     setSaving(true);
-    if (isNew) {
-      const created = await base44.entities.Project.create(project);
-      navigate(`/admin/projects/${created.id}`);
-    } else {
-      await base44.entities.Project.update(project.id, project);
+    setError('');
+
+    try {
+      if (isNew) {
+        const created = await base44.entities.Project.create(project);
+        navigate(`/admin/projects/${created.id}`);
+      } else {
+        const updates = { ...project };
+        delete updates.id;
+        delete updates.created_date;
+        delete updates.updated_date;
+        delete updates.created_by;
+        await base44.entities.Project.update(project.id, updates);
+      }
+    } catch (err) {
+      const denied = err?.status === 401 || err?.status === 403;
+      setError(
+        denied
+          ? 'Permission denied. Sign in with a Base44 admin account before saving projects.'
+          : 'Save failed. Please try again.'
+      );
+      console.error('Project save failed:', err);
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleThumbnail = async (e) => {
@@ -128,6 +151,11 @@ export default function ProjectEditor() {
             </button>
           </div>
         </div>
+        {error && (
+          <div className="mb-6 border border-destructive/40 bg-destructive/10 px-4 py-3 text-destructive font-mono-ui text-xs tracking-wide">
+            {error}
+          </div>
+        )}
 
         <div className="space-y-6">
           {/* Core fields */}

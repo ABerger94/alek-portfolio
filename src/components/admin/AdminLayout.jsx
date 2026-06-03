@@ -13,6 +13,10 @@ const NAV = [
 export default function AdminLayout({ children }) {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
+  const logout = () => {
+    sessionStorage.removeItem('admin_authenticated');
+    base44.auth.logout('/');
+  };
 
   return (
     <div className="flex min-h-screen bg-obsidian">
@@ -60,7 +64,7 @@ export default function AdminLayout({ children }) {
         </nav>
 
         <button
-          onClick={() => base44.auth.logout('/')}
+          onClick={logout}
           title={collapsed ? 'Logout' : undefined}
           className={`flex items-center gap-3 px-3 py-2.5 font-mono-ui text-xs text-circuit hover:text-destructive tracking-widest transition-colors min-h-[44px] ${collapsed ? 'justify-center px-0' : ''}`}
         >
