@@ -167,9 +167,9 @@ export default function HeroSection({ settings, projects = [] }) {
               {(() => {
                 const allTags = [...new Set(projects.flatMap(p => p.tech_stack || []))];
                 const newestProject = projects[0];
-                const newestDate = newestProject?.created_date
+                const newestDate = settings?.last_shipped || (newestProject?.created_date
                   ? new Date(newestProject.created_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-                  : null;
+                  : null);
                 return (
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
