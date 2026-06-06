@@ -56,27 +56,19 @@
     "avg_build_time": {
       "type": "string",
       "description": "Average build time display string e.g. '3 days'"
+    },
+    "last_shipped": {
+      "type": "string",
+      "description": "Override for Last Ship date displayed in hero widget e.g. 'Jun 2025'"
     }
   },
   "required": [
     "key"
   ],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
+    "create": {},
     "read": null,
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
+    "update": {},
+    "delete": {}
   }
 }

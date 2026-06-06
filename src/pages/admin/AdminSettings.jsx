@@ -120,6 +120,11 @@ export default function AdminSettings() {
                 <input type="text" value={settings.tokens_orchestrated} onChange={e => set('tokens_orchestrated', e.target.value)}
                   className={inputClass} placeholder="47.2M" />
               </div>
+              <div>
+                <label className={labelClass}>Last Shipped (display)</label>
+                <input type="text" value={settings.last_shipped || ''} onChange={e => set('last_shipped', e.target.value)}
+                  className={inputClass} placeholder="Jun 2025" />
+              </div>
             </div>
           </div>
 
